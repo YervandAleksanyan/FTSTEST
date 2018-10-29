@@ -1,0 +1,75 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: 'realm-android'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.example.yervand.ftstest"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+    }
+    packagingOptions {
+        exclude 'lib/arm64-v8a/libsqlite3x.so'
+        exclude 'lib/x86/libsqlite3x.so'
+        exclude 'lib/x86_64/libsqlite3x.so'
+        exclude 'lib/mips/libsqlite3x.so'
+    }
+    dataBinding {
+        enabled = true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildToolsVersion '28.0.3'
+}
+
+dependencies {
+    ext.kotlin_version = '1.2.30'
+    ext.lifecycle_version = '1.1.1'
+    ext.dagger2_version = '2.16'
+    ext.rxJavaVersion = '2.1.16'
+    ext.rxAndroidVersion = '2.0.2'
+    ext.supportLibVersion = '28.0.0'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.1.0-beta01'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-beta01'
+    //Support library
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha2'
+    //AAC libs
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.0.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
+    implementation "com.google.dagger:dagger:$dagger2_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger2_version"
+    kapt "com.google.dagger:dagger-android-processor:$dagger2_version"
+    compileOnly 'org.glassfish:javax.annotation:3.1.1'
+    implementation "com.google.dagger:dagger-android-support:${dagger2_version}"
+    implementation "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"
+    implementation "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+    implementation 'com.jakewharton.rxbinding:rxbinding:1.0.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5'
+    kapt 'androidx.databinding:databinding-compiler:3.2.0'
+    implementation project(':sqlite-android-3250200')
+    implementation 'com.android.support:support-dynamic-animation:28.0.0'
+
+}
