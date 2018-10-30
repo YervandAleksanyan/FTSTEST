@@ -36,9 +36,9 @@
         <com.example.yervand.ftstest.view.CodexNavigationView
             android:id="@+id/codexNavigationView3"
             codexItems="@{viewModel.codexItems}"
-            scrollSpeed="@{viewModel.scrollSpeed}"
             scrollState="@{viewModel.scrollState}"
             visiblePosition="@{viewModel.scrollPosition}"
+            rotateValue = "@{viewModel.rotateValue}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"

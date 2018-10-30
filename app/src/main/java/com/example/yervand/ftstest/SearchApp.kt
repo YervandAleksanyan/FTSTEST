@@ -19,6 +19,5 @@ class SearchApp : DaggerApplication() {
                 .build())
     }
 
-
     override fun applicationInjector(): AndroidInjector<out SearchApp> = DaggerAppComponent.builder().create(this)
 }

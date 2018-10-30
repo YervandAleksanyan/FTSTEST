@@ -94,15 +94,23 @@ class CodexNavigationView : LinearLayout {
     }
 
     companion object {
-        @BindingAdapter("codexItems", "visiblePosition", "scrollState", "scrollSpeed")
+        @BindingAdapter("codexItems", "visiblePosition", "scrollState", "rotateValue")
         @JvmStatic
-        fun renderCodexItemPosition(view: CodexNavigationView, codexItems: ObservableArrayList<CodexEntity>, pos: Int, state: Int, speed: Int) {
+        fun renderCodexItemPosition(view: CodexNavigationView, codexItems: ObservableArrayList<CodexEntity>, pos: Int, state: Int, rotateValue: Float) {
             when (state) {
                 RecyclerView.SCROLL_STATE_DRAGGING -> {
                     if (!codexItems.isEmpty() && pos != -1) {
                         val parentItems = view.getParentCodexItemsList(codexItems[pos])
                                 .reversed()
-                        view.startAnimation()
+                        view.partIndicator
+                                .rotationX = ((360 * rotateValue) / 100)
+                        when (rotateValue) {
+                            in 50..180 -> view.partIndicator.alpha = (rotateValue / 1000)
+                            in 180F..310F -> view.partIndicator.alpha = (rotateValue) / 4000
+                            else -> view.partIndicator.alpha = 1F
+                        }
+//                        view.valueAnimator.setValues(PropertyValuesHolder.ofFloat("rotationX", (360 * rotateValue) / 100))
+//                        view.startAnimation()
                         if (parentItems.size > 1 && !view.mapCodexItem(parentItems.getOrNull(0)).isEmpty()) {
                             view.indicatorVisibility(view.partIndicator, view.mapCodexItem(parentItems.getOrNull(0)))
                             view.indicatorVisibility(view.sectionIndicator, view.mapCodexItem(parentItems.getOrNull(1)))
@@ -124,17 +132,20 @@ class CodexNavigationView : LinearLayout {
                     }
                 }
 
-                RecyclerView.SCROLL_STATE_IDLE -> view.stopAnimation()
+                RecyclerView.SCROLL_STATE_IDLE -> {
+                    view.partIndicator.animate()
+                            .setDuration(500)
+                            .rotationX(0.0F)
+                            .alpha(1.0F)
+                            .start()
+                }
             }
         }
     }
 
 
     private fun initAnimation() {
-        valueAnimator = ValueAnimator.ofFloat(0.0F, 360f).apply {
-            duration = 1000
-            repeatCount = Animation.INFINITE
-        }
+        valueAnimator = ValueAnimator.ofFloat(0.0F, 360f)
         valueAnimator.addUpdateListener {
             when {
                 it.animatedValue as Float in 50F..180F -> {
@@ -217,7 +228,6 @@ class CodexNavigationView : LinearLayout {
                         .start()
 
             }
-
         })
         valueAnimator.start()
         valueAnimator.pause()
