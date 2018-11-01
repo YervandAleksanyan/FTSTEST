@@ -102,26 +102,27 @@ class CodexNavigationView : LinearLayout {
                     if (!codexItems.isEmpty() && pos != -1) {
                         val parentItems = view.getParentCodexItemsList(codexItems[pos])
                                 .reversed()
+
+                        val rotationResult = (360 * rotateValue) / 100
                         view.partIndicator
-                                .rotationX = ((360 * rotateValue) / 100)
-                        when (rotateValue) {
-                            in 50..180 -> view.partIndicator.alpha = (rotateValue / 1000)
-                            in 180F..310F -> view.partIndicator.alpha = (rotateValue) / 4000
+                                .rotationX = (rotationResult)
+                        when (rotationResult) {
+                            in 50F..310F -> view.partIndicator.alpha = (rotateValue / 150)
                             else -> view.partIndicator.alpha = 1F
                         }
 //                        view.valueAnimator.setValues(PropertyValuesHolder.ofFloat("rotationX", (360 * rotateValue) / 100))
 //                        view.startAnimation()
-                        if (parentItems.size > 1 && !view.mapCodexItem(parentItems.getOrNull(0)).isEmpty()) {
-                            view.indicatorVisibility(view.partIndicator, view.mapCodexItem(parentItems.getOrNull(0)))
-                            view.indicatorVisibility(view.sectionIndicator, view.mapCodexItem(parentItems.getOrNull(1)))
-                            view.indicatorVisibility(view.chapterIndicator, view.mapCodexItem(parentItems.getOrNull(2)))
-                            view.indicatorVisibility(view.articleIndicator, view.mapCodexItem(parentItems.getOrNull(3)))
-                            view.indicatorVisibility(view.articlePartIndicator, view.mapCodexItem(parentItems.getOrNull(4)))
-                            view.indicatorVisibility(view.paragraphIndicator, view.mapCodexItem(parentItems.getOrNull(5)))
-                            view.indicatorVisibility(view.subParagraphIndicator, view.mapCodexItem(parentItems.getOrNull(6)))
-                        } else {
-                            view.visiblyAllIndicators()
-                        }
+//                        if (parentItems.size > 1 && !view.mapCodexItem(parentItems.getOrNull(0)).isEmpty()) {
+//                            view.indicatorVisibility(view.partIndicator, view.mapCodexItem(parentItems.getOrNull(0)))
+//                            view.indicatorVisibility(view.sectionIndicator, view.mapCodexItem(parentItems.getOrNull(1)))
+//                            view.indicatorVisibility(view.chapterIndicator, view.mapCodexItem(parentItems.getOrNull(2)))
+//                            view.indicatorVisibility(view.articleIndicator, view.mapCodexItem(parentItems.getOrNull(3)))
+//                            view.indicatorVisibility(view.articlePartIndicator, view.mapCodexItem(parentItems.getOrNull(4)))
+//                            view.indicatorVisibility(view.paragraphIndicator, view.mapCodexItem(parentItems.getOrNull(5)))
+//                            view.indicatorVisibility(view.subParagraphIndicator, view.mapCodexItem(parentItems.getOrNull(6)))
+//                        } else {
+//                            view.visiblyAllIndicators()
+//                        }
                         view.partIndicator.text = view.mapCodexItem(parentItems.getOrNull(0))
                         view.sectionIndicator.text = view.mapCodexItem(parentItems.getOrNull(1))
                         view.chapterIndicator.text = view.mapCodexItem(parentItems.getOrNull(2))
@@ -131,11 +132,10 @@ class CodexNavigationView : LinearLayout {
                         view.subParagraphIndicator.text = view.mapCodexItem(parentItems.getOrNull(6))
                     }
                 }
-
                 RecyclerView.SCROLL_STATE_IDLE -> {
                     view.partIndicator.animate()
                             .setDuration(500)
-                            .rotationX(0.0F)
+                            .rotationX(0F)
                             .alpha(1.0F)
                             .start()
                 }

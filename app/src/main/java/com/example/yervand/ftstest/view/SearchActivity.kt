@@ -1,5 +1,6 @@
 package com.example.yervand.ftstest.view
 
+import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.Build
 import androidx.lifecycle.ViewModelProviders
@@ -19,7 +20,6 @@ import com.example.yervand.ftstest.di.factories.SearchViewModelFactory
 import com.example.yervand.ftstest.view.base.BaseActivity
 import com.example.yervand.ftstest.view.controls.adapter.binding.ItemBinderBase
 import com.example.yervand.ftstest.viewmodel.SearchViewModel
-import kotlinx.android.synthetic.main.activity_search.*
 import javax.inject.Inject
 
 
@@ -48,6 +48,7 @@ class SearchActivity : BaseActivity() {
         layoutManager = LinearLayoutManager(this)
         binding.itemsRv.layoutManager = layoutManager
         binding.itemsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            @SuppressLint("SetTextI18n")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val position = layoutManager.findFirstVisibleItemPosition()
                 if (dy != 0) {
@@ -56,7 +57,9 @@ class SearchActivity : BaseActivity() {
                     val rect = Rect()
                     val view = layoutManager.findViewByPosition(position)
                     layoutManager.findViewByPosition(position)?.getLocalVisibleRect(rect)
-                    viewModel.rotateValue.set(100 - (((rect.height().toFloat() / view!!.height.toFloat())) * 100))
+                    val percentage = 100 - (((rect.height().toFloat() / view!!.height.toFloat())) * 100)
+                    viewModel.rotateValue.set(if (dy < 0) -percentage else percentage)
+                    binding.percentage.text = "$percentage%"
                 }
             }
 
@@ -65,7 +68,6 @@ class SearchActivity : BaseActivity() {
                     viewModel.scrollState.set(RecyclerView.SCROLL_STATE_IDLE)
                 }
             }
-
         })
     }
 
