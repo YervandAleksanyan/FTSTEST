@@ -21,7 +21,6 @@ class SearchViewModel @Inject constructor(repository: FTSDataRepository, realmRe
     val searchCommand = SearchCommand(this, repository, realmRepository)
     var scrollPosition: ObservableField<Int> = ObservableField()
     var scrollState: ObservableField<Int> = ObservableField()
-    var rotateValue: ObservableField<Float> = ObservableField()
 
     var typing = Job()
     private var searchKeyChangeCallback: Observable.OnPropertyChangedCallback

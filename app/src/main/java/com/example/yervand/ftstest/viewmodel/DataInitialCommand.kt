@@ -6,7 +6,8 @@ import com.example.yervand.ftstest.viewmodel.base.implementation.BaseCommand
 
 class DataInitialCommand(private val viewModel: SearchViewModel, private val repository: FTSDataRepository, private val realmRepository: RealmRepository) : BaseCommand() {
     override fun execute(obj: Any?) {
-        repository.insert(realmRepository.all())
-        viewModel.codexItems?.addAll(realmRepository.all())
+        val result = realmRepository.all()
+        repository.insert(result)
+        viewModel.codexItems?.addAll(result)
     }
 }

@@ -48,18 +48,11 @@ class SearchActivity : BaseActivity() {
         layoutManager = LinearLayoutManager(this)
         binding.itemsRv.layoutManager = layoutManager
         binding.itemsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            @SuppressLint("SetTextI18n")
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 val position = layoutManager.findFirstVisibleItemPosition()
                 if (dy != 0) {
                     viewModel.scrollState.set(RecyclerView.SCROLL_STATE_DRAGGING)
                     viewModel.scrollPosition.set(position)
-                    val rect = Rect()
-                    val view = layoutManager.findViewByPosition(position)
-                    layoutManager.findViewByPosition(position)?.getLocalVisibleRect(rect)
-                    val percentage = 100 - (((rect.height().toFloat() / view!!.height.toFloat())) * 100)
-                    viewModel.rotateValue.set(if (dy < 0) -percentage else percentage)
-                    binding.percentage.text = "$percentage%"
                 }
             }
 
