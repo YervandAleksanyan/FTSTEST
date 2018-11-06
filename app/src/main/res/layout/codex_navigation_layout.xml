@@ -4,19 +4,69 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/holo_purple"
-    android:orientation="vertical"
-    android:padding="8dp">
+    android:orientation="vertical">
 
     <com.example.yervand.ftstest.utill.CodexNavigationItem
         android:id="@+id/part_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/section_indicator"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    </com.example.yervand.ftstest.utill.CodexNavigationItem>
+    <com.example.yervand.ftstest.utill.CodexNavigationItem
+        android:id="@+id/section_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/chapter_indicator"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/part_indicator" />
+
+    <com.example.yervand.ftstest.utill.CodexNavigationItem
+        android:id="@+id/chapter_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/article_indicator"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/section_indicator" />
+
+    <com.example.yervand.ftstest.utill.CodexNavigationItem
+        android:id="@+id/article_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/article_part_indicator"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/chapter_indicator" />
+
+    <com.example.yervand.ftstest.utill.CodexNavigationItem
+        android:id="@+id/article_part_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/paragraph_indicator"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/article_indicator" />
+
+    <com.example.yervand.ftstest.utill.CodexNavigationItem
+        android:id="@+id/paragraph_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/sub_paragraph_indicator"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/article_part_indicator" />
+
+    <com.example.yervand.ftstest.utill.CodexNavigationItem
+        android:id="@+id/sub_paragraph_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/paragraph_indicator" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

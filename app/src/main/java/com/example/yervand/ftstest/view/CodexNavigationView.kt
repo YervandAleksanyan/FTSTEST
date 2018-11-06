@@ -1,27 +1,26 @@
 package com.example.yervand.ftstest.view
 
-import android.animation.*
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import android.view.animation.*
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ObservableArrayList
-import androidx.dynamicanimation.animation.DynamicAnimation
-import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yervand.ftstest.R
 import com.example.yervand.ftstest.db.model.CodexEntity
 import com.example.yervand.ftstest.db.model.CodexEntityType
 import com.example.yervand.ftstest.utill.CodexNavigationItem
-import kotlin.math.absoluteValue
 
 class CodexNavigationView : LinearLayout {
 
     private lateinit var partIndicator: CodexNavigationItem
+    private lateinit var sectionIndicator: CodexNavigationItem
+    private lateinit var chapterIndicator: CodexNavigationItem
+    private lateinit var articleIndicator: CodexNavigationItem
+    private lateinit var articlePartIndicator: CodexNavigationItem
+    private lateinit var paragraphIndicator: CodexNavigationItem
+    private lateinit var subParagraphIndicator: CodexNavigationItem
 
     constructor(context: Context) : super(context) {
         init(context, null)
@@ -43,6 +42,13 @@ class CodexNavigationView : LinearLayout {
 
     private fun initIndicators() {
         partIndicator = findViewById(R.id.part_indicator)
+        sectionIndicator = findViewById(R.id.section_indicator)
+        chapterIndicator = findViewById(R.id.chapter_indicator)
+        articleIndicator = findViewById(R.id.article_indicator)
+        articlePartIndicator = findViewById(R.id.article_part_indicator)
+        paragraphIndicator = findViewById(R.id.paragraph_indicator)
+        subParagraphIndicator = findViewById(R.id.sub_paragraph_indicator
+        )
     }
 
 
@@ -62,20 +68,41 @@ class CodexNavigationView : LinearLayout {
 
 
     companion object {
-        @BindingAdapter("codexItems", "visiblePosition", "scrollState")
+        @BindingAdapter("codexItems", "visiblePosition", "scrollState", "scrollDirection")
         @JvmStatic
-        fun renderCodexItemPosition(view: CodexNavigationView, codexItems: ObservableArrayList<CodexEntity>, pos: Int, state: Int) {
+        fun renderCodexItemPosition(view: CodexNavigationView, codexItems: ObservableArrayList<CodexEntity>, pos: Int, state: Int, direction: Int) {
             when (state) {
                 RecyclerView.SCROLL_STATE_DRAGGING -> {
                     if (!codexItems.isEmpty() && pos != -1) {
                         val parentItems = view.getParentCodexItemsList(codexItems[pos])
                                 .reversed()
-                        view.partIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(0)))
+                        val scrollDirection: CodexNavigationItem.ScrollDirection =
+                                if (direction == 0) CodexNavigationItem.ScrollDirection.DOWN
+                                else CodexNavigationItem.ScrollDirection.UP
+                        view.partIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(0)), scrollDirection)
                         view.partIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
+                        view.sectionIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(1)), scrollDirection)
+                        view.sectionIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
+                        view.chapterIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(2)), scrollDirection)
+                        view.chapterIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
+                        view.articleIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(3)), scrollDirection)
+                        view.articleIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
+                        view.articlePartIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(4)), scrollDirection)
+                        view.articlePartIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
+                        view.paragraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(5)), scrollDirection)
+                        view.paragraphIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
+                        view.subParagraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(6)), scrollDirection)
+                        view.subParagraphIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
                     }
                 }
                 RecyclerView.SCROLL_STATE_IDLE -> {
-
+                    view.partIndicator.animationStop()
+                    view.sectionIndicator.animationStop()
+                    view.chapterIndicator.animationStop()
+                    view.articleIndicator.animationStop()
+                    view.articlePartIndicator.animationStop()
+                    view.paragraphIndicator.animationStop()
+                    view.subParagraphIndicator.animationStop()
                 }
             }
         }

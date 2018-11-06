@@ -2,19 +2,19 @@
 <rotate xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:fromDegrees="270"
-        android:toDegrees="270"
+    android:toDegrees="270"
     tools:ignore="MissingDefaultResource">
     <shape
-            android:innerRadiusRatio="2.5"
-            android:shape="ring"
-            android:thickness="1pt"
-            android:useLevel="true">
+        android:innerRadiusRatio="2.5"
+        android:shape="ring"
+        android:thickness="1pt"
+        android:useLevel="true">
 
         <gradient
-                android:angle="0"
-                android:endColor="#FFFF"
-                android:startColor="#FFFF"
-                android:type="sweep"
-                android:useLevel="false"/>
+            android:angle="0"
+            android:endColor="#FFFF"
+            android:startColor="#FFFF"
+            android:type="sweep"
+            android:useLevel="false" />
     </shape>
 </rotate>

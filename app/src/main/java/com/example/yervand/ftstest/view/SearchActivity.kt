@@ -53,6 +53,7 @@ class SearchActivity : BaseActivity() {
                 if (dy != 0) {
                     viewModel.scrollState.set(RecyclerView.SCROLL_STATE_DRAGGING)
                     viewModel.scrollPosition.set(position)
+                    viewModel.scrollDirection.set(if (dy > 0) 0 else 1)
                 }
             }
 
