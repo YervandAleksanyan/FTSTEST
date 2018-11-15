@@ -74,35 +74,36 @@ class CodexNavigationView : LinearLayout {
             when (state) {
                 RecyclerView.SCROLL_STATE_DRAGGING -> {
                     if (!codexItems.isEmpty() && pos != -1) {
-                        val parentItems = view.getParentCodexItemsList(codexItems[pos])
-                                .reversed()
-                        val scrollDirection: CodexNavigationItem.ScrollDirection =
-                                if (direction == 0) CodexNavigationItem.ScrollDirection.DOWN
-                                else CodexNavigationItem.ScrollDirection.UP
-                        view.partIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(0)), scrollDirection)
                         view.partIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
-                        view.sectionIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(1)), scrollDirection)
                         view.sectionIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
-                        view.chapterIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(2)), scrollDirection)
                         view.chapterIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
-                        view.articleIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(3)), scrollDirection)
                         view.articleIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
-                        view.articlePartIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(4)), scrollDirection)
                         view.articlePartIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
-                        view.paragraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(5)), scrollDirection)
                         view.paragraphIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
-                        view.subParagraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(6)), scrollDirection)
                         view.subParagraphIndicator.setProgressValue(view.calculatePercentage(codexItems[pos]))
                     }
                 }
                 RecyclerView.SCROLL_STATE_IDLE -> {
-                    view.partIndicator.animationStop()
-                    view.sectionIndicator.animationStop()
-                    view.chapterIndicator.animationStop()
-                    view.articleIndicator.animationStop()
-                    view.articlePartIndicator.animationStop()
-                    view.paragraphIndicator.animationStop()
-                    view.subParagraphIndicator.animationStop()
+                    val parentItems = view.getParentCodexItemsList(codexItems[pos])
+                            .reversed()
+                    val scrollDirection: CodexNavigationItem.ScrollDirection =
+                            if (direction == 0) CodexNavigationItem.ScrollDirection.DOWN
+                            else CodexNavigationItem.ScrollDirection.UP
+                    view.partIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(0)), scrollDirection)
+                    view.sectionIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(1)), scrollDirection)
+                    view.chapterIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(2)), scrollDirection)
+                    view.articleIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(3)), scrollDirection)
+                    view.articlePartIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(4)), scrollDirection)
+                    view.paragraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(5)), scrollDirection)
+                    view.subParagraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(6)), scrollDirection)
+
+                    view.partIndicator.progressAnimationStop()
+                    view.sectionIndicator.progressAnimationStop()
+                    view.chapterIndicator.progressAnimationStop()
+                    view.articleIndicator.progressAnimationStop()
+                    view.articlePartIndicator.progressAnimationStop()
+                    view.paragraphIndicator.progressAnimationStop()
+                    view.subParagraphIndicator.progressAnimationStop()
                 }
             }
         }
@@ -110,10 +111,10 @@ class CodexNavigationView : LinearLayout {
 
     private fun calculatePercentage(item: CodexEntity?): Int? {
         val parentEntity = item?.Parent
-        val childrens = parentEntity?.Children
-        val childPosition = childrens?.indexOf(item)
+        val children = parentEntity?.Children
+        val childPosition = children?.indexOf(item)
 
-        return ((childPosition?.toFloat()?.div(childrens.size.toFloat()))?.times(100))?.toInt()
+        return ((childPosition?.toFloat()?.div(children.size.toFloat()))?.times(100))?.toInt()
     }
 
     private fun parseType(type: Int?): String = when (type) {

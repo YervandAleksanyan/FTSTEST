@@ -1,15 +1,8 @@
 package com.example.yervand.ftstest.view
 
-import android.annotation.SuppressLint
-import android.graphics.Rect
-import android.os.Build
 import androidx.lifecycle.ViewModelProviders
 import androidx.databinding.DataBindingUtil
 import android.os.Bundle
-import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.widget.Scroller
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yervand.ftstest.BR
@@ -47,19 +40,23 @@ class SearchActivity : BaseActivity() {
         binding.view = this
         layoutManager = LinearLayoutManager(this)
         binding.itemsRv.layoutManager = layoutManager
+        var position = 0
+        var dY = 0
         binding.itemsRv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val position = layoutManager.findFirstVisibleItemPosition()
+                position = layoutManager.findFirstVisibleItemPosition()
                 if (dy != 0) {
                     viewModel.scrollState.set(RecyclerView.SCROLL_STATE_DRAGGING)
                     viewModel.scrollPosition.set(position)
-                    viewModel.scrollDirection.set(if (dy > 0) 0 else 1)
+                    dY = dy
                 }
             }
 
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     viewModel.scrollState.set(RecyclerView.SCROLL_STATE_IDLE)
+                    viewModel.scrollPosition.set(position)
+                    viewModel.scrollDirection.set(if (dY > 0) 0 else 1)
                 }
             }
         })

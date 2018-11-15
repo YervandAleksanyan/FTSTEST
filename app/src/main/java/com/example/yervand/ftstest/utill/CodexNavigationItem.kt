@@ -9,7 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import com.example.yervand.ftstest.R
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Animation
+import com.robertlevonyan.components.kex.onEnd
 
 
 class CodexNavigationItem : FrameLayout {
@@ -20,7 +20,7 @@ class CodexNavigationItem : FrameLayout {
     private lateinit var currentText: TextView
     private lateinit var progressAnimation: ValueAnimator
     private var progressValue: Int? = 0
-    private val set = AnimatorSet()
+    private val circularAnimation = AnimatorSet()
 
     constructor(context: Context) : super(context) {
         init(context, null)
@@ -62,100 +62,35 @@ class CodexNavigationItem : FrameLayout {
         val upAnimation: ObjectAnimator?
         val downAnimation: ObjectAnimator?
         if (!text.isEmpty()) {
-            if (currentText.text != text) {
+            restoreViewsAlpha()
+            if (currentText == itemText) {
+                itemText.text = text
+                currentText = itemTextSecond
+            } else {
+                itemTextSecond.text = text
+                currentText = itemText
+            }
 
+            if (currentText.text != text) {
                 when (scrollDirection) {
                     ScrollDirection.UP -> {
-                        upAnimation =
-                                ObjectAnimator.ofFloat(currentText,
-                                        "translationY", 0F, progressBar.height.toFloat())
-                                        .apply {
-                                            repeatCount = Animation.INFINITE
-                                            duration = 1000
-                                        }
-                        downAnimation =
-                                ObjectAnimator.ofFloat(if (currentText == itemText) itemTextSecond else itemText, "translationY", -progressBar.height.toFloat(), 0F)
-                                        .apply {
-                                            repeatCount = Animation.INFINITE
-                                            duration = 1000
-                                        }
+                        upAnimation = createTranslationAnimation(currentText, 0F, -progressBar.height.toFloat())
+
+                        downAnimation = createTranslationAnimation(if (currentText == itemText) itemTextSecond else itemText,
+                                progressBar.height.toFloat(), 0F)
+
                     }
                     else -> {
-                        upAnimation =
-                                ObjectAnimator.ofFloat(currentText,
-                                        "translationY", 0F, -progressBar.height.toFloat())
-                                        .apply {
-                                            repeatCount = Animation.INFINITE
-                                            duration = 1000
-                                        }
-                        downAnimation =
-                                ObjectAnimator.ofFloat(if (currentText == itemText) itemTextSecond else itemText, "translationY", progressBar.height.toFloat(), 0F)
-                                        .apply {
-                                            repeatCount = Animation.INFINITE
-                                            duration = 1000
-                                        }
+                        upAnimation = createTranslationAnimation(currentText, 0F, progressBar.height.toFloat())
+
+                        downAnimation = createTranslationAnimation(if (currentText == itemText) itemTextSecond else itemText, -progressBar.height.toFloat(), 0F)
                     }
                 }
-                set.duration = 1000
-                set.addPauseListener(object : Animator.AnimatorPauseListener {
-                    override fun onAnimationPause(animation: Animator?) {
-                        currentText
-                                .translationY = if (ScrollDirection.UP == scrollDirection) -progressBar.height.toFloat() else
-                            progressBar.height.toFloat()
-
-                        if (currentText != itemText) {
-                            itemText
-                                    .animate()
-                                    .setDuration(500)
-                                    .translationY(-0F)
-                                    .start()
-                        }
-                        if (currentText != itemTextSecond) {
-                            itemTextSecond
-                                    .animate()
-                                    .setDuration(500)
-                                    .translationY(-0F)
-                                    .start()
-                        }
-                    }
-
-                    override fun onAnimationResume(animation: Animator?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                })
-                set.playTogether(upAnimation, downAnimation)
-                set.start()
-                set.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(animation: Animator?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-
-                    override fun onAnimationEnd(animation: Animator?) {
-                        currentText.translationY =
-                                if (ScrollDirection.UP == scrollDirection) progressBar.height.toFloat()
-                                else -progressBar.height.toFloat()
-                    }
-
-                    override fun onAnimationCancel(animation: Animator?) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                    override fun onAnimationStart(animation: Animator?) {
-                        if (currentText == itemText) {
-                            itemText.text = text
-                            currentText = itemTextSecond
-                        } else {
-                            itemTextSecond.text = text
-                            currentText = itemText
-                        }
-                    }
-                })
+                createCircularAnimation(scrollDirection, upAnimation, downAnimation)
             }
         } else {
-            itemTextSecond.text = ""
-            itemText.text = ""
+            textAlphaAnimation(itemTextSecond)
+            textAlphaAnimation(itemText)
         }
     }
 
@@ -170,13 +105,47 @@ class CodexNavigationItem : FrameLayout {
         }
     }
 
-    fun animationStop() {
+    private fun createTranslationAnimation(view: TextView, vararg values: Float): ObjectAnimator =
+            ObjectAnimator.ofFloat(view,
+                    "translationY", values.first(), values.last())
+                    .apply {
+                        duration = 1000
+                    }
+
+    private fun createCircularAnimation(scrollDirection: ScrollDirection, vararg translationAnimation: ObjectAnimator) {
+        circularAnimation.duration = 1000
+        circularAnimation.playTogether(translationAnimation.asList())
+        circularAnimation.start()
+        circularAnimation.onEnd {
+            currentText.translationY =
+                    if (ScrollDirection.UP == scrollDirection) -progressBar.height.toFloat()
+                    else progressBar.height.toFloat()
+        }
+    }
+
+    fun progressAnimationStop() {
         progressAnimation.pause()
-        set.pause()
     }
 
     enum class ScrollDirection {
         DOWN,
         UP
+    }
+
+    private fun textAlphaAnimation(view: TextView) {
+        val animation = ObjectAnimator.ofFloat(view, "alpha", 1F, 0F)
+                .apply {
+                    duration = 1000
+                    interpolator = AccelerateDecelerateInterpolator()
+                }
+        animation.onEnd {
+            view.text = ""
+        }
+        animation.start()
+    }
+
+    private fun restoreViewsAlpha() {
+        itemText.alpha = 1F
+        itemTextSecond.alpha = 1F
     }
 }
