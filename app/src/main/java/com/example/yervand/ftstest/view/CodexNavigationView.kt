@@ -89,21 +89,24 @@ class CodexNavigationView : LinearLayout {
                     val scrollDirection: CodexNavigationItem.ScrollDirection =
                             if (direction == 0) CodexNavigationItem.ScrollDirection.DOWN
                             else CodexNavigationItem.ScrollDirection.UP
-                    view.partIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(0)), scrollDirection)
-                    view.sectionIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(1)), scrollDirection)
-                    view.chapterIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(2)), scrollDirection)
-                    view.articleIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(3)), scrollDirection)
-                    view.articlePartIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(4)), scrollDirection)
-                    view.paragraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(5)), scrollDirection)
-                    view.subParagraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(6)), scrollDirection)
 
-                    view.partIndicator.progressAnimationStop()
-                    view.sectionIndicator.progressAnimationStop()
-                    view.chapterIndicator.progressAnimationStop()
-                    view.articleIndicator.progressAnimationStop()
-                    view.articlePartIndicator.progressAnimationStop()
-                    view.paragraphIndicator.progressAnimationStop()
-                    view.subParagraphIndicator.progressAnimationStop()
+                    if (!parentItems.isEmpty()) {
+                        view.partIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(0)), scrollDirection)
+                        view.sectionIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(1)), scrollDirection)
+                        view.chapterIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(2)), scrollDirection)
+                        view.articleIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(3)), scrollDirection)
+                        view.articlePartIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(4)), scrollDirection)
+                        view.paragraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(5)), scrollDirection)
+                        view.subParagraphIndicator.setItemText(view.mapCodexItem(parentItems.getOrNull(6)), scrollDirection)
+
+                        view.partIndicator.progressAnimationStop()
+                        view.sectionIndicator.progressAnimationStop()
+                        view.chapterIndicator.progressAnimationStop()
+                        view.articleIndicator.progressAnimationStop()
+                        view.articlePartIndicator.progressAnimationStop()
+                        view.paragraphIndicator.progressAnimationStop()
+                        view.subParagraphIndicator.progressAnimationStop()
+                    }
                 }
             }
         }
