@@ -2,6 +2,7 @@ package com.example.yervand.ftstest.view
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
 import androidx.databinding.BindingAdapter
@@ -135,7 +136,8 @@ class CodexNavigationView : LinearLayout {
 
     private fun mapCodexItem(codexEntity: CodexEntity?): String {
         return when {
-            codexEntity != null -> "${parseType(codexEntity.Type)}${codexEntity.NumberString ?: ""}"
+            codexEntity != null -> "${parseType(codexEntity.Type)}AA${codexEntity.NumberString
+                    ?: ""}"
             else -> ""
         }
     }

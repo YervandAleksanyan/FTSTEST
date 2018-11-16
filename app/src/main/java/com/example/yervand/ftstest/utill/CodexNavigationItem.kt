@@ -3,6 +3,7 @@ package com.example.yervand.ftstest.utill
 import android.animation.*
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -14,9 +15,9 @@ import com.robertlevonyan.components.kex.onEnd
 
 class CodexNavigationItem : FrameLayout {
 
-    enum class ScrollDirection {
-        DOWN,
-        UP
+    enum class ScrollDirection(value: Int) {
+        DOWN(-1),
+        UP(1)
     }
 
     private lateinit var progressBar: ProgressBar
@@ -70,6 +71,7 @@ class CodexNavigationItem : FrameLayout {
 
             //Second View Animation
             secondTextView.text = text
+            Log.i("tag", secondTextView.textSize.toString())
             secondTextView.translationY = auxLabelOffset
             secondTextView.scaleY = 0.1F
             secondTextView.scaleX = 1F
@@ -134,17 +136,7 @@ class CodexNavigationItem : FrameLayout {
         }
     }
 
-    private fun createTranslationAnimation(view: TextView, vararg values: Float): ObjectAnimator =
-            ObjectAnimator.ofFloat(view,
-                    "translationY", values.first(), values.last())
-                    .apply {
-                        duration = 1000
-                    }
-
-
     fun progressAnimationStop() {
         progressAnimation.pause()
     }
-
-
 }
