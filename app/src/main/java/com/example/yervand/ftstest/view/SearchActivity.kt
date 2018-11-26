@@ -1,8 +1,11 @@
 package com.example.yervand.ftstest.view
 
+import android.app.Activity
 import androidx.lifecycle.ViewModelProviders
 import androidx.databinding.DataBindingUtil
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yervand.ftstest.BR
@@ -13,13 +16,23 @@ import com.example.yervand.ftstest.di.factories.SearchViewModelFactory
 import com.example.yervand.ftstest.view.base.BaseActivity
 import com.example.yervand.ftstest.view.controls.adapter.binding.ItemBinderBase
 import com.example.yervand.ftstest.viewmodel.SearchViewModel
+import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
+interface IViewModelProvider {
+    fun getSearchViewModel(context: AppCompatActivity): SearchViewModel
+}
+
+class AppViewModelProvider @Inject constructor(var factory: SearchViewModelFactory) : IViewModelProvider {
+    override fun getSearchViewModel(context: AppCompatActivity): SearchViewModel {
+        return ViewModelProviders.of(context, factory)[SearchViewModel::class.java]
+    }
+}
 
 class SearchActivity : BaseActivity() {
 
     @Inject
-    lateinit var factory: SearchViewModelFactory
+    lateinit var viewModelProvider: IViewModelProvider
 
     private lateinit var binding: ActivitySearchBinding
 
@@ -35,7 +48,7 @@ class SearchActivity : BaseActivity() {
 
     private fun initBindings() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_search)
-        viewModel = ViewModelProviders.of(this, factory)[SearchViewModel::class.java]
+        viewModel = viewModelProvider.getSearchViewModel(this)
         binding.viewModel = viewModel
         binding.view = this
         layoutManager = LinearLayoutManager(this)
