@@ -13,21 +13,12 @@ import com.example.yervand.ftstest.R
 import com.example.yervand.ftstest.databinding.ActivitySearchBinding
 import com.example.yervand.ftstest.db.model.CodexEntity
 import com.example.yervand.ftstest.di.factories.SearchViewModelFactory
+import com.example.yervand.ftstest.di.modules.viewmodels.IViewModelProvider
 import com.example.yervand.ftstest.view.base.BaseActivity
 import com.example.yervand.ftstest.view.controls.adapter.binding.ItemBinderBase
 import com.example.yervand.ftstest.viewmodel.SearchViewModel
-import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-interface IViewModelProvider {
-    fun getSearchViewModel(context: AppCompatActivity): SearchViewModel
-}
-
-class AppViewModelProvider @Inject constructor(var factory: SearchViewModelFactory) : IViewModelProvider {
-    override fun getSearchViewModel(context: AppCompatActivity): SearchViewModel {
-        return ViewModelProviders.of(context, factory)[SearchViewModel::class.java]
-    }
-}
 
 class SearchActivity : BaseActivity() {
 
